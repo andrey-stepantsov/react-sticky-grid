@@ -2,7 +2,7 @@
 
 A reusable React grid/table component with sticky columns, built using TanStack Table and Material UI.
 
-![Demo](doc/demo.gif)
+<img src="doc/demo.gif" alt="Demo" width="50%" />
 
 ## Features
 
