@@ -112,6 +112,30 @@ npm run test
 
 The dev server runs on `http://localhost:3000` and displays a demo of the sticky grid component.
 
+## Release
+
+Use the release script to bump version, tag, and push:
+
+```bash
+# Patch release (0.1.0 -> 0.1.1)
+./scripts/release.sh patch
+
+# Minor release (0.1.0 -> 0.2.0)
+./scripts/release.sh minor
+
+# Major release (0.1.0 -> 1.0.0)
+./scripts/release.sh major
+```
+
+The script will:
+- Validate no uncommitted changes exist
+- Bump the version in `package.json`
+- Build the library
+- Commit and tag the release
+- Push to remote repository
+
+After running the script, publish to npm with `npm publish`.
+
 ## Tech Stack
 
 - React 18
