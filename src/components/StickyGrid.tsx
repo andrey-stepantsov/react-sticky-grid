@@ -19,12 +19,14 @@ type StickyGridProps<T extends object> = {
   data: T[];
   columns: ColumnDef<T, any>[];
   stickyColumns?: number; // number of leftmost columns to stick
+  cellProps?: React.ComponentProps<typeof TableCell>; // custom props for all cells
 };
 
 export function StickyGrid<T extends object>({
   data,
   columns,
   stickyColumns = 1,
+  cellProps = { sx: { whiteSpace: "nowrap" } },
 }: StickyGridProps<T>) {
   const table = useReactTable({
     data,
@@ -51,8 +53,8 @@ export function StickyGrid<T extends object>({
   }, [stickyColumns, data, columns]);
 
   return (
-    <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
-      <Table stickyHeader>
+    <TableContainer component={Paper} sx={{ maxHeight: 500, maxWidth: "100%" }}>
+      <Table stickyHeader sx={{ minWidth: 800 }}>
         <TableHead>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -62,11 +64,14 @@ export function StickyGrid<T extends object>({
                   ref={(el) => {
                     colRefs.current[i] = el as HTMLTableCellElement | null;
                   }}
+                  {...cellProps}
                   sx={{
                     position: i < stickyColumns ? "sticky" : "static",
                     left: i < stickyColumns ? stickyOffsets[i] : undefined,
-                    background: "white",
+                    background: i < stickyColumns ? "#f5f5f5" : "white",
                     zIndex: i < stickyColumns ? 2 : 1,
+                    fontWeight: "bold",
+                    ...cellProps?.sx,
                   }}
                 >
                   {header.isPlaceholder
@@ -89,11 +94,13 @@ export function StickyGrid<T extends object>({
                   ref={(el) => {
                     colRefs.current[i] = el as HTMLTableCellElement | null;
                   }}
+                  {...cellProps}
                   sx={{
                     position: i < stickyColumns ? "sticky" : "static",
                     left: i < stickyColumns ? stickyOffsets[i] : undefined,
-                    background: "white",
+                    background: i < stickyColumns ? "#fafafa" : "white",
                     zIndex: i < stickyColumns ? 1 : 0,
+                    ...cellProps?.sx,
                   }}
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
