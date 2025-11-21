@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { StickyGrid } from "../components/StickyGrid";
 import { ColumnDef } from "@tanstack/react-table";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, TextField } from "@mui/material";
 
 type Person = { id: number; name: string; age: number; city: string; email: string; department: string; salary: number };
 
-const data: Person[] = [
+const initialData: Person[] = [
   { id: 1, name: "Alice Johnson", age: 25, city: "New York", email: "alice@example.com", department: "Engineering", salary: 95000 },
   { id: 2, name: "Bob Smith", age: 30, city: "San Francisco", email: "bob@example.com", department: "Design", salary: 87000 },
   { id: 3, name: "Charlie Brown", age: 28, city: "Chicago", email: "charlie@example.com", department: "Marketing", salary: 72000 },
@@ -16,17 +16,48 @@ const data: Person[] = [
   { id: 8, name: "Hannah White", age: 26, city: "Portland", email: "hannah@example.com", department: "Design", salary: 83000 },
 ];
 
-const columns: ColumnDef<Person>[] = [
-  { accessorKey: "id", header: "ID" },
-  { accessorKey: "name", header: "Name" },
-  { accessorKey: "age", header: "Age" },
-  { accessorKey: "city", header: "City" },
-  { accessorKey: "email", header: "Email" },
-  { accessorKey: "department", header: "Department" },
-  { accessorKey: "salary", header: "Salary" }
-];
-
 export default function Demo() {
+  const [data, setData] = useState(initialData);
+
+  const handleNameChange = (rowIndex: number, newName: string) => {
+    setData((prevData) =>
+      prevData.map((row, i) => (i === rowIndex ? { ...row, name: newName } : row))
+    );
+  };
+
+  const columns: ColumnDef<Person>[] = [
+    { accessorKey: "id", header: "ID" },
+    {
+      accessorKey: "name",
+      header: "Name",
+      cell: ({ row }) => (
+        <TextField
+          value={row.original.name}
+          onChange={(e) => handleNameChange(row.index, e.target.value)}
+          variant="standard"
+          size="small"
+          fullWidth
+          sx={{
+            "& .MuiInput-root": {
+              fontSize: 14,
+            },
+            "& .MuiInput-root:before": {
+              borderBottom: "1px solid transparent",
+            },
+            "& .MuiInput-root:hover:before": {
+              borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+            },
+          }}
+        />
+      ),
+    },
+    { accessorKey: "age", header: "Age" },
+    { accessorKey: "city", header: "City" },
+    { accessorKey: "email", header: "Email" },
+    { accessorKey: "department", header: "Department" },
+    { accessorKey: "salary", header: "Salary" },
+  ];
+
   return (
     <Box
       sx={{
@@ -56,7 +87,7 @@ export default function Demo() {
             textAlign: "center",
           }}
         >
-          Scroll horizontally to see the first two columns stick in place
+          Scroll horizontally to see the first two columns stick in place. Click on any name to edit it!
         </Typography>
         <Box
           sx={{

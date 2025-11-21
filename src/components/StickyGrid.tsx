@@ -66,10 +66,10 @@ export function StickyGrid<T extends object>({
                   }}
                   {...cellProps}
                   sx={{
-                    position: i < stickyColumns ? "sticky" : "static",
+                    position: "sticky",
                     left: i < stickyColumns ? stickyOffsets[i] : undefined,
                     background: i < stickyColumns ? "#f5f5f5" : "white",
-                    zIndex: i < stickyColumns ? 2 : 1,
+                    zIndex: i < stickyColumns ? 3 : 2,
                     fontWeight: "bold",
                     ...cellProps?.sx,
                   }}
